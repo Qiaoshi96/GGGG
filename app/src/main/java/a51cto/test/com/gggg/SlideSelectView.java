@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,8 +30,7 @@ public class SlideSelectView extends View {
 	//线的高度
 	private static float HEIGHT_LINE = 2;
 	//线距离两头的边距
-//	private static float MARGEN_LINE = RADIU_BIG * 3;
-	private static float MARGEN_LINE = 33;
+	private static float MARGEN_LINE = 33;//调节边距
 	//小圆的数量
 	private int countOfSmallCircle;
 	//小圆的横坐标
@@ -87,7 +87,7 @@ public class SlideSelectView extends View {
 		mPaint.setAntiAlias(true);//防止抖动
 
 		textSize = TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics());//设置字体大小可以自己调
+				TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics());//设置字体大小可以自己调
 
 		mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
 		mTextPaint.setColor(Color.GRAY);
@@ -104,7 +104,7 @@ public class SlideSelectView extends View {
 	 */
 	public void setString(String[] strings) {
 		text4Rates = strings;
-		textWidth = mTextPaint.measureText(text4Rates[0]);
+		textWidth = mTextPaint.measureText(text4Rates[0]);//获取输入字体宽度
 
 		if (countOfSmallCircle != text4Rates.length) {
 			throw new IllegalArgumentException("the count of small circle must be equal to the " +
@@ -159,23 +159,42 @@ public class SlideSelectView extends View {
 //		}
 
 
-		//画文字 显示在刻度下方
-		canvas.drawText(text4Rates[currentPosition], circlesX[currentPosition] - textWidth / 2,
-				(mHeight / 2) - RADIU_BIG -
+		//画文字 显示在刻度
+//		canvas.drawText(text4Rates[currentPosition], circlesX[currentPosition] - textWidth / 2,
+//				(mHeight / 2) - RADIU_BIG -
+//						RADIU_SMALL,
+//				mTextPaint);
+
+
+		canvas.drawText(text4Rates[0], circlesX[0] - textWidth / 2,
+				mHeight-RADIU_SMALL+10,
+				mTextPaint);
+
+
+		canvas.drawText(text4Rates[1], circlesX[1] - textWidth / 2,
+				(mHeight) - RADIU_BIG -
 						RADIU_SMALL,
 				mTextPaint);
 
-		//画大圆的默认位置
+
+		canvas.drawText(text4Rates[2], circlesX[2] - textWidth / 2,
+				(mHeight) - RADIU_BIG -
+						RADIU_SMALL,
+				mTextPaint);
+
+		//画大圆的默认位置大圆内部
 		mPaint.setStyle(Paint.Style.FILL);
 		mPaint.setStrokeWidth(2);
 		mPaint.setColor(Color.WHITE);
-		canvas.drawCircle(bigCircleX, mHeight / 2, RADIU_BIG, mPaint);
+		canvas.drawCircle(bigCircleX, mHeight / 2, 19, mPaint);
+		//canvas.drawCircle(bigCircleX, mHeight / 2, RADIU_BIG, mPaint);
 
-		//画大圆的默认位置
+		//画大圆的默认位置大圆外部
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setStrokeWidth(2);
 		mPaint.setColor(Color.GRAY);
-		canvas.drawCircle(bigCircleX, mHeight / 2, RADIU_BIGS, mPaint);
+		canvas.drawCircle(bigCircleX, mHeight / 2, 20, mPaint);
+		//canvas.drawCircle(bigCircleX, mHeight / 2, RADIU_BIG, mPaint);
 
 	}
 
@@ -258,6 +277,7 @@ public class SlideSelectView extends View {
 		super.onSizeChanged(w, h, oldw, oldh);
 		mHeight = h;
 		mWidth = w;
+		Log.e("TAG",h+"------"+w);
 		//计算每个小圆点的x坐标
 		circlesX = new float[countOfSmallCircle];
 		distanceX = (mWidth - MARGEN_LINE * 2) / (countOfSmallCircle - 1);
@@ -302,6 +322,9 @@ public class SlideSelectView extends View {
 		}
 
 		setMeasuredDimension(resultWidth, resultHeight);
+		Log.e("TAG","OnMeasure"+resultWidth+"------"+resultHeight);
+
+		//setMeasuredDimension(520, 150);
 
 	}
 

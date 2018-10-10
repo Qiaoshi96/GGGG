@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
         textStrings = new String[]{"小", "中", "大"};//只有小中大三个选项
         slideSelectView.setString(textStrings);
         slideSelectView.setOnSelectListener(onSelect);
+        slideSelectView.setCurrentPosition(0);
     }
 
     private SeekBar.OnSeekBarChangeListener seekBarChange = new SeekBar.OnSeekBarChangeListener() {
