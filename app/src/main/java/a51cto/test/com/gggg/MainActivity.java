@@ -2,7 +2,9 @@ package a51cto.test.com.gggg;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -11,12 +13,14 @@ public class MainActivity extends Activity {
     private SeekBar light_seekBar;
     private SlideSelectView slideSelectView;
     private String[] textStrings;
+    private Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         light_seekBar = (SeekBar)findViewById(R.id.light_seekBar);
         slideSelectView = (SlideSelectView)findViewById(R.id.slideSelectView);
+        button = findViewById(R.id.button);
 
         light_seekBar.setOnSeekBarChangeListener(seekBarChange);
 
@@ -24,7 +28,22 @@ public class MainActivity extends Activity {
         textStrings = new String[]{"小", "中", "大"};//只有小中大三个选项
         slideSelectView.setString(textStrings);
         slideSelectView.setOnSelectListener(onSelect);
+
         slideSelectView.setCurrentPosition(0);
+
+        /**
+         *  下面这个方法不起作用
+         */
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                slideSelectView.setCurrentPosition(1);
+            }
+        });
+
+
+
     }
 
     private SeekBar.OnSeekBarChangeListener seekBarChange = new SeekBar.OnSeekBarChangeListener() {
